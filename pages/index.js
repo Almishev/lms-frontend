@@ -19,23 +19,33 @@ export default function HomePage({featuredProduct,newProducts}) {
 }
 
 export async function getServerSideProps() {
-  await mongooseConnect();
-  
-  // Взимаме featured product ID от settings
-  const {Settings} = await import('@/models/Settings');
-  const featuredProductSetting = await Settings.findOne({name: 'featuredProductId'});
-  const featuredProductId = featuredProductSetting?.value;
-  
-  let featuredProduct = null;
-  if (featuredProductId) {
-    featuredProduct = await Product.findById(featuredProductId);
+  try {
+    await mongooseConnect();
+    
+    // Взимаме featured product ID от settings
+    const {Settings} = await import('@/models/Settings');
+    const featuredProductSetting = await Settings.findOne({name: 'featuredProductId'});
+    const featuredProductId = featuredProductSetting?.value;
+    
+    let featuredProduct = null;
+    if (featuredProductId) {
+      featuredProduct = await Product.findById(featuredProductId);
+    }
+    
+    const newProducts = await Product.find({}, null, {sort: {'_id':-1}, limit:12});
+    return {
+      props: {
+        featuredProduct: featuredProduct ? JSON.parse(JSON.stringify(featuredProduct)) : null,
+        newProducts: JSON.parse(JSON.stringify(newProducts)),
+      },
+    };
+  } catch (error) {
+    console.error('Error in getServerSideProps:', error);
+    return {
+      props: {
+        featuredProduct: null,
+        newProducts: [],
+      },
+    };
   }
-  
-  const newProducts = await Product.find({}, null, {sort: {'_id':-1}, limit:12});
-  return {
-    props: {
-      featuredProduct: featuredProduct ? JSON.parse(JSON.stringify(featuredProduct)) : null,
-      newProducts: JSON.parse(JSON.stringify(newProducts)),
-    },
-  };
 }

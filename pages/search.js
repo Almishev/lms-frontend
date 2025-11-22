@@ -61,45 +61,58 @@ export async function getServerSideProps({query}) {
     };
   }
 
-  await mongooseConnect();
-  
-  // Пагинация
-  const pageParam = parseInt(query.page, 10);
-  const page = Math.max(1, isNaN(pageParam) ? 1 : pageParam);
-  const skip = (page - 1) * PAGE_SIZE;
+  try {
+    await mongooseConnect();
+    
+    // Пагинация
+    const pageParam = parseInt(query.page, 10);
+    const page = Math.max(1, isNaN(pageParam) ? 1 : pageParam);
+    const skip = (page - 1) * PAGE_SIZE;
 
-  // Търсене
-  const regex = new RegExp(searchQuery, 'i');
-  const mongoQuery = {
-    $or: [
-      { title: regex },
-      { author: regex },
-      { isbn: regex },
-      { description: regex },
-    ]
-  };
+    // Търсене
+    const regex = new RegExp(searchQuery, 'i');
+    const mongoQuery = {
+      $or: [
+        { title: regex },
+        { author: regex },
+        { isbn: regex },
+        { description: regex },
+      ]
+    };
 
-  // Броим общия брой резултати
-  const totalCount = await Product.countDocuments(mongoQuery);
-  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
-  const currentPage = Math.min(page, totalPages);
-  const currentSkip = (currentPage - 1) * PAGE_SIZE;
+    // Броим общия брой резултати
+    const totalCount = await Product.countDocuments(mongoQuery);
+    const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+    const currentPage = Math.min(page, totalPages);
+    const currentSkip = (currentPage - 1) * PAGE_SIZE;
 
-  // Намираме книгите с пагинация
-  const books = await Product.find(mongoQuery, null, {
-    sort: {'_id': -1},
-    skip: currentSkip,
-    limit: PAGE_SIZE,
-  }).lean();
+    // Намираме книгите с пагинация
+    const books = await Product.find(mongoQuery, null, {
+      sort: {'_id': -1},
+      skip: currentSkip,
+      limit: PAGE_SIZE,
+    }).lean();
 
-  return {
-    props: {
-      query: searchQuery,
-      books: JSON.parse(JSON.stringify(books)),
-      page: currentPage,
-      totalPages,
-      totalCount,
-    }
-  };
+    return {
+      props: {
+        query: searchQuery,
+        books: JSON.parse(JSON.stringify(books)),
+        page: currentPage,
+        totalPages,
+        totalCount,
+      }
+    };
+  } catch (error) {
+    console.error('Error in search getServerSideProps:', error);
+    return {
+      props: {
+        query: searchQuery,
+        books: [],
+        page: 1,
+        totalPages: 1,
+        totalCount: 0,
+      }
+    };
+  }
 }
 
