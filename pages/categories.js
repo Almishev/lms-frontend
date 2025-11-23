@@ -1,12 +1,14 @@
 import Header from "@/components/Header";
 import styled from "styled-components";
 import Center from "@/components/Center";
+import Image from "next/image";
 import {mongooseConnect} from "@/lib/mongoose";
 import {Category} from "@/models/Category";
 import {Product} from "@/models/Product";
 import Link from "next/link";
 import Title from "@/components/Title";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const CategoryGrid = styled.div`
   display: grid;
@@ -30,14 +32,7 @@ const CategoryCard = styled(Link)`
   }
 `;
 
-const CategoryImage = styled.img`
-  width: 100%;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  background: #f3f3f3;
-`;
+// CategoryImage е заменен с Next.js Image component
 
 const CategoryTitle = styled.h3`
   margin: 0 0 10px 0;
@@ -62,6 +57,12 @@ const ProductCount = styled.span`
 export default function CategoriesPage({categories}) {
   return (
     <>
+      <SEO 
+        title="Жанрове | Библиотека с. Мосомище"
+        description={`Жанрове книги в библиотека с. Мосомище. Роман, фантастика, детективски роман, поезия, драма и други. Безплатни книги за четене.`}
+        keywords="жанрове книги, роман, фантастика, детективски роман, поезия, драма, библиотека Мосомище"
+        url="/categories"
+      />
       <Header />
       <Center>
         <Title>Жанрове</Title>
@@ -72,7 +73,22 @@ export default function CategoriesPage({categories}) {
             {categories.map(category => (
               <CategoryCard key={category._id} href={`/category/${category._id}`}>
                 {category.image && (
-                  <CategoryImage src={category.image} alt={category.name} />
+                  <Image 
+                    src={category.image} 
+                    alt={category.name}
+                    width={200}
+                    height={140}
+                    style={{
+                      width: '100%',
+                      height: '140px',
+                      objectFit: 'cover',
+                      borderRadius: '8px',
+                      marginBottom: '12px',
+                      background: '#f3f3f3',
+                    }}
+                    loading="lazy"
+                    unoptimized={category.image?.includes('s3.amazonaws.com')}
+                  />
                 )}
                 <CategoryTitle>{category.name}</CategoryTitle>
                 <CategoryDescription>

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import HeartIcon from "@/components/icons/Heart";
 import Link from "next/link";
+import Image from "next/image";
 import {useWishlist} from "@/components/WishlistContext";
 import toast from "react-hot-toast";
 import BookPlaceholderIcon from "@/components/BookPlaceholderIcon";
@@ -45,10 +46,6 @@ const WhiteBox = styled(Link)`
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  img{
-    max-width: 100%;
-    max-height: 80px;
-  }
 `;
 const PlaceholderThumb = styled.div`
   width: 80px;
@@ -96,7 +93,7 @@ const Price = styled.div`
   }
 `;
 
-export default function ProductBox({_id,title,description,stock,images}) {
+export default function ProductBox({_id,title,description,stock,images,author}) {
   
   const {addToWishlist, removeFromWishlist, isInWishlist} = useWishlist();
   const url = '/product/'+_id;
@@ -133,7 +130,19 @@ export default function ProductBox({_id,title,description,stock,images}) {
       <WhiteBox href={url}>
         <div>
           {images?.[0] ? (
-            <img src={images[0]} alt=""/>
+            <Image 
+              src={images[0]} 
+              alt={`${title}${author ? ` - ${author}` : ''} - Библиотека с. Мосомище`}
+              width={120}
+              height={80}
+              style={{
+                maxWidth: '100%',
+                height: 'auto',
+                objectFit: 'contain',
+              }}
+              loading="lazy"
+              unoptimized={images[0]?.includes('s3.amazonaws.com')}
+            />
           ) : (
             <PlaceholderThumb>
               <BookPlaceholderIcon size={32} />

@@ -1,15 +1,9 @@
 import styled from "styled-components";
 import {useEffect, useState} from "react";
+import Image from "next/image";
 import BookPlaceholderIcon from "@/components/BookPlaceholderIcon";
 
-const Image = styled.img`
-    max-width: 100%;
-    max-height: 100%;
-  `;
-const BigImage = styled.img`
-  max-width: 100%;
-  max-height: 200px;
-`;
+// Image components са заменени с Next.js Image за lazy loading
 const ImageButtons = styled.div`
     display: flex;
     gap: 10px;
@@ -72,7 +66,20 @@ export default function ProductImages({images = []}) {
   return (
     <>
       <BigImageWrapper>
-        <BigImage src={activeImage} alt="" />
+        <Image 
+          src={activeImage} 
+          alt=""
+          width={400}
+          height={200}
+          style={{
+            maxWidth: '100%',
+            maxHeight: '200px',
+            height: 'auto',
+            objectFit: 'contain',
+          }}
+          loading="lazy"
+          unoptimized={activeImage?.includes('s3.amazonaws.com')}
+        />
       </BigImageWrapper>
       <ImageButtons>
         {images.map(image => (
@@ -80,7 +87,19 @@ export default function ProductImages({images = []}) {
             key={image}
             active={image===activeImage}
             onClick={() => setActiveImage(image)}>
-            <Image src={image} alt=""/>
+            <Image 
+              src={image} 
+              alt=""
+              width={40}
+              height={40}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+              loading="lazy"
+              unoptimized={image?.includes('s3.amazonaws.com')}
+            />
           </ImageButton>
         ))}
       </ImageButtons>

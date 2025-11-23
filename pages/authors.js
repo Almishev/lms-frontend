@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import styled from "styled-components";
 import Center from "@/components/Center";
+import Image from "next/image";
 import {mongooseConnect} from "@/lib/mongoose";
 import {Product} from "@/models/Product";
 import Title from "@/components/Title";
@@ -8,6 +9,7 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import Pagination from "@/components/Pagination";
 import BookPlaceholderIcon from "@/components/BookPlaceholderIcon";
+import SEO from "@/components/SEO";
 
 const AuthorsGrid = styled.div`
   display: grid;
@@ -37,14 +39,6 @@ const BookPreview = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
-  img {
-    width: 48px;
-    height: 68px;
-    object-fit: cover;
-    border-radius: 6px;
-    background: #f3f3f3;
-    border: 1px solid #e5e7eb;
-  }
   span {
     font-size: 0.9rem;
     color: #555;
@@ -79,6 +73,12 @@ const BookCount = styled.span`
 export default function AuthorsPage({authors, page, totalPages, totalCount}) {
   return (
     <>
+      <SEO 
+        title="Автори | Библиотека с. Мосомище"
+        description={`Автори в библиотека с. Мосомище. Общо ${totalCount} ${totalCount === 1 ? 'автор' : 'автори'}. Български и световни автори.`}
+        keywords="автори, български автори, световни автори, библиотека Мосомище, писатели"
+        url="/authors"
+      />
       <Header />
       <Center>
         <Title>Автори</Title>
@@ -95,7 +95,22 @@ export default function AuthorsPage({authors, page, totalPages, totalCount}) {
                   {author.sample && (
                     <BookPreview>
                       {author.sample.image ? (
-                        <img src={author.sample.image} alt={author.sample.title} />
+                        <Image 
+                          src={author.sample.image} 
+                          alt={author.sample.title}
+                          width={48}
+                          height={68}
+                          style={{
+                            width: '48px',
+                            height: '68px',
+                            objectFit: 'cover',
+                            borderRadius: '6px',
+                            background: '#f3f3f3',
+                            border: '1px solid #e5e7eb',
+                          }}
+                          loading="lazy"
+                          unoptimized={author.sample.image?.includes('s3.amazonaws.com')}
+                        />
                       ) : (
                         <PreviewPlaceholder>
                           <BookPlaceholderIcon size={36} />

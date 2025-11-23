@@ -156,7 +156,7 @@ export default function Header() {
           <Logo href={'/'}>
             <LogoImage 
               src="/натруфенка.png" 
-              alt="Natrufenka" 
+              alt="Библиотека с. Мосомище - Лого" 
               width={100} 
               height={40}
               style={{objectFit: 'contain'}}

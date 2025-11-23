@@ -7,6 +7,7 @@ import ProductsGrid from "@/components/ProductsGrid";
 import Title from "@/components/Title";
 import Link from "next/link";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const Breadcrumb = styled.div`
   margin-bottom: 20px;
@@ -64,6 +65,13 @@ export default function AuthorPage({author, books}) {
 
   return (
     <>
+      <SEO 
+        title={`${author} - Книги | Библиотека с. Мосомище`}
+        description={`Книги от ${author} в библиотека с. Мосомище. ${books.length} ${books.length === 1 ? 'книга' : 'книги'} безплатно за четене.`}
+        keywords={`${author}, книги, библиотека Мосомище, безплатни книги`}
+        url={`/author/${encodeURIComponent(author)}`}
+        author={author}
+      />
       <Header />
       <Center>
         <Breadcrumb>

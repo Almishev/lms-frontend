@@ -5,16 +5,25 @@ import {mongooseConnect} from "@/lib/mongoose";
 import NewProducts from "@/components/NewProducts";
 import Footer from "@/components/Footer";
 import HeroVideo from "@/components/HeroVideo";
+import SEO from "@/components/SEO";
 
 export default function HomePage({featuredProduct,newProducts}) {
   return (
-    <div>
-      <Header />
-      <HeroVideo />
-      {featuredProduct && <Featured product={featuredProduct} />}
-      <NewProducts products={newProducts} />
-      <Footer />
-    </div>
+    <>
+      <SEO 
+        title="Библиотека с. Мосомище - Безплатни книги за четене | Гоце Делчев"
+        description="Библиотека с. Мосомище, община Гоце Делчев. Безплатни книги за четене - българска и световна литература. Посетете библиотеката и изберете книга за четене!"
+        keywords="библиотека Мосомище, безплатни книги, Гоце Делчев, българска литература, световна литература, книги за четене, библиотека България"
+        url="/"
+      />
+      <div>
+        <Header />
+        <HeroVideo />
+        {featuredProduct && <Featured product={featuredProduct} />}
+        <NewProducts products={newProducts} />
+        <Footer />
+      </div>
+    </>
   );
 }
 

@@ -8,6 +8,7 @@ import ProductsGrid from "@/components/ProductsGrid";
 import Title from "@/components/Title";
 import Link from "next/link";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const Breadcrumb = styled.div`
   margin-bottom: 20px;
@@ -77,6 +78,12 @@ export default function CategoryPage({category, products, parentCategory}) {
 
   return (
     <>
+      <SEO 
+        title={`${category.name} - Книги | Библиотека с. Мосомище`}
+        description={`Книги в жанр "${category.name}" в библиотека с. Мосомище. ${products.length} ${products.length === 1 ? 'книга' : 'книги'} безплатно за четене.`}
+        keywords={`${category.name}, жанр, книги, библиотека Мосомище, безплатни книги`}
+        url={`/category/${category._id}`}
+      />
       <Header />
       <Center>
         <Breadcrumb>

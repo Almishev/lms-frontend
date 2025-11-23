@@ -6,6 +6,7 @@ import ProductsGrid from "@/components/ProductsGrid";
 import Title from "@/components/Title";
 import Footer from "@/components/Footer";
 import Pagination from "@/components/Pagination";
+import SEO from "@/components/SEO";
 
 const PAGE_SIZE = 20;
 
@@ -31,8 +32,22 @@ export default function ProductsPage({products, page, totalPages, totalCount, se
     ? `/products?search=${encodeURIComponent(searchTerm.trim())}`
     : '/products';
 
+  const seoTitle = initialSearch 
+    ? `Търсене: "${initialSearch}" | Библиотека с. Мосомище`
+    : 'Всички книги | Библиотека с. Мосомище';
+  
+  const seoDescription = initialSearch
+    ? `Търсене на книги по "${initialSearch}" в библиотека с. Мосомище. Намерени ${totalCount} ${totalCount === 1 ? 'книга' : 'книги'}.`
+    : `Всички книги в библиотека с. Мосомище. Общо ${totalCount} ${totalCount === 1 ? 'книга' : 'книги'}. Безплатни книги за четене в община Гоце Делчев.`;
+
   return (
     <>
+      <SEO 
+        title={seoTitle}
+        description={seoDescription}
+        keywords={initialSearch ? `търсене книги, ${initialSearch}, библиотека Мосомище` : 'всички книги, библиотека Мосомище, каталог книги, безплатни книги'}
+        url={initialSearch ? `/products?search=${encodeURIComponent(initialSearch)}` : '/products'}
+      />
       <Header />
       <Center>
         <Title>Всички книги</Title>

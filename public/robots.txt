@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://lms-frontend-virid-kappa.vercel.app/sitemap.xml
+
+# Disallow admin pages
+Disallow: /api/
+Disallow: /account
+

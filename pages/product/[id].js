@@ -8,6 +8,7 @@ import WhiteBox from "@/components/WhiteBox";
 import ProductImages from "@/components/ProductImages";
 import {useEffect, useState} from "react";
 import Button from "@/components/Button";
+import SEO from "@/components/SEO";
 
 const ColWrapper = styled.div`
   display: grid;
@@ -106,8 +107,32 @@ export default function ProductPage({product}) {
     } finally { setSubmitting(false); }
   }
   
+  const bookDescription = product.description 
+    ? `${product.description.substring(0, 150)}...` 
+    : `Книга "${product.title}"${product.author ? ` от ${product.author}` : ''} в библиотека с. Мосомище. Безплатно за четене!`;
+  
+  const bookImage = product.images?.[0] || '/натруфенка.png';
+  const breadcrumbs = [
+    { name: 'Начало', url: '/' },
+    { name: 'Всички книги', url: '/products' },
+    { name: product.title, url: `/product/${product._id}` },
+  ];
+
   return (
     <>
+      <SEO 
+        title={`${product.title}${product.author ? ` - ${product.author}` : ''} | Библиотека с. Мосомище`}
+        description={bookDescription}
+        keywords={`${product.title}, ${product.author || ''}, книга, библиотека Мосомище, безплатна книга, ${product.category?.name || ''}`}
+        image={bookImage}
+        url={`/product/${product._id}`}
+        type="book"
+        bookTitle={product.title}
+        bookAuthor={product.author}
+        bookIsbn={product.isbn}
+        bookPublishedYear={product.publishedYear}
+        breadcrumbs={breadcrumbs}
+      />
       <Header />
       <Center>
         <ColWrapper>
@@ -188,7 +213,14 @@ export default function ProductPage({product}) {
 export async function getServerSideProps(context) {
   await mongooseConnect();
   const {id} = context.query;
-  const product = await Product.findById(id);
+  const product = await Product.findById(id).populate('category');
+  
+  if (!product) {
+    return {
+      notFound: true,
+    };
+  }
+  
   return {
     props: {
       product: JSON.parse(JSON.stringify(product)),

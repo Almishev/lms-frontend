@@ -1,5 +1,6 @@
 import Center from "@/components/Center";
 import styled from "styled-components";
+import Image from "next/image";
 import ButtonLink from "@/components/ButtonLink";
 
 const Bg = styled.div`
@@ -23,12 +24,6 @@ const ColumnsWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   gap: 40px;
-  img{
-    max-width: 100%;
-    max-height: 200px;
-    display: block;
-    margin: 0 auto;
-  }
   div:nth-child(1) {
     order: 2;
   }
@@ -36,9 +31,6 @@ const ColumnsWrapper = styled.div`
     grid-template-columns: 1.1fr 0.9fr;
     div:nth-child(1) {
       order: 0;
-    }
-    img{
-      max-width: 100%;
     }
   }
 `;
@@ -67,7 +59,34 @@ export default function Featured({product}) {
             </div>
           </Column>
           <Column>
-            <img src={product.images?.[0] || '/placeholder-product.png'} alt={product.title}/>
+            {product.images?.[0] ? (
+              <Image 
+                src={product.images[0]} 
+                alt={product.title}
+                width={400}
+                height={200}
+                style={{
+                  maxWidth: '100%',
+                  maxHeight: '200px',
+                  height: 'auto',
+                  objectFit: 'contain',
+                }}
+                loading="lazy"
+                unoptimized={product.images[0]?.includes('s3.amazonaws.com')}
+              />
+            ) : (
+              <div style={{
+                width: '100%',
+                height: '200px',
+                backgroundColor: '#f9fafb',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '12px',
+              }}>
+                <span style={{color: '#999'}}>Няма снимка</span>
+              </div>
+            )}
           </Column>
         </ColumnsWrapper>
       </Center>

@@ -7,6 +7,7 @@ import {Product} from "@/models/Product";
 import Title from "@/components/Title";
 import Footer from "@/components/Footer";
 import Pagination from "@/components/Pagination";
+import SEO from "@/components/SEO";
 
 const PAGE_SIZE = 20;
 
@@ -26,6 +27,12 @@ export default function SearchPage({query, books, page, totalPages, totalCount})
 
   return (
     <>
+      <SEO 
+        title={`Търсене: "${query}" | Библиотека с. Мосомище`}
+        description={`Търсене на книги по "${query}" в библиотека с. Мосомище. Намерени ${totalCount} ${totalCount === 1 ? 'книга' : 'книги'}. Безплатни книги за четене.`}
+        keywords={`търсене, ${query}, книги, библиотека Мосомище`}
+        url={`/search?q=${encodeURIComponent(query)}`}
+      />
       <Header />
       <Center>
         <Title>Търсене</Title>
