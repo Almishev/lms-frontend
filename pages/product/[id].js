@@ -185,7 +185,7 @@ export default function ProductPage({product}) {
                     </StarBtn>
                   ))}
                 </Stars>
-                <InputEl type="text" placeholder="Заглавие" value={titleText} onChange={e=>setTitleText(e.target.value)} />
+                <InputEl type="text" placeholder="Име" value={titleText} onChange={e=>setTitleText(e.target.value)} />
                 <TextareaEl placeholder="Беше ли добро? Плюсове? Минуси?" value={content} onChange={e=>setContent(e.target.value)} />
                 <Button primary disabled={submitting}>
                   {submitting ? 'Изпращане...' : 'Изпрати ревю'}
