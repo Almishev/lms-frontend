@@ -15,10 +15,8 @@ const nextConfig = {
         hostname: '**.s3.**.amazonaws.com',
       },
     ],
-    // Оптимизация на снимките
-    formats: ['image/avif', 'image/webp'],
-    // Lazy loading по подразбиране
-    loading: 'lazy',
+      // Оптимизация на снимките
+      formats: ['image/avif', 'image/webp'],
   },
 }
 
